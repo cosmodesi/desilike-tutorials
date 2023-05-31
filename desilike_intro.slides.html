@@ -14676,6 +14676,16 @@ div.jp-OutputPrompt {
 <p>For the analytic solver:</p>
 <pre><code>python -m pip install jax[cpu]
 </code></pre>
+<p>Available in the preliminary* cosmodesi environment at this path:</p>
+<pre><code># Source the environment
+source /global/cfs/cdirs/desi/users/adematti/cosmodesi_environment.sh main
+# You may want to have it in the jupyter-kernel for plots, to be done once
+${COSMODESIMODULES}/install_jupyter_kernel.sh main
+</code></pre>
+<p>Instead of the more stable one:</p>
+<pre><code>source /global/common/software/desi/users/adematti/cosmodesi_environment.sh main
+</code></pre>
+<p>that can be used for GQC-only work.</p>
 
 </div>
 </div>
