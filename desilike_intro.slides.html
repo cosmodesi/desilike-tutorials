@@ -4995,7 +4995,7 @@ form{
   .bp3-running-text table th, table.bp3-html-table th{
     color:#182026;
     font-weight:600; }
-  
+
   .bp3-running-text table td,
   table.bp3-html-table td{
     color:#182026; }
@@ -14516,6 +14516,7 @@ a.anchor-link {
 }
 .reveal .slides {
   text-align: left;
+  width: 70% !important;
 }
 .reveal.fade {
   opacity: 1;
@@ -14659,7 +14660,7 @@ div.jp-OutputPrompt {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="desilike">desilike<a class="anchor-link" href="#desilike">&#182;</a></h1><h2 id="Framework-to-specify-DESI-(clustering)-likelihoods">Framework to specify DESI (clustering) likelihoods<a class="anchor-link" href="#Framework-to-specify-DESI-(clustering)-likelihoods">&#182;</a></h2><h3 id="Tutorial-%231:-likelihoods,-bindings-and-desilike's-utilities">Tutorial #1: likelihoods, bindings and desilike's utilities<a class="anchor-link" href="#Tutorial-%231:-likelihoods,-bindings-and-desilike's-utilities">&#182;</a></h3>
+<h1 id="desilike">desilike<a class="anchor-link" href="#desilike">&#182;</a></h1><h2 id="Framework-to-specify-DESI-(clustering)-likelihoods">Framework to specify DESI (clustering) likelihoods<a class="anchor-link" href="#Framework-to-specify-DESI-(clustering)-likelihoods">&#182;</a></h2><h3 id="Tutorial-%231:-likelihoods,-emulators,-samplers,-profilers,-Fisher">Tutorial #1: likelihoods, emulators, samplers, profilers, Fisher<a class="anchor-link" href="#Tutorial-%231:-likelihoods,-emulators,-samplers,-profilers,-Fisher">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -14670,22 +14671,39 @@ div.jp-OutputPrompt {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Installation">Installation<a class="anchor-link" href="#Installation">&#182;</a></h1><p>To run the following desilike-only examples, you just need to have installed <strong>desilike</strong> (which requires <strong>cosmoprimo</strong>) with:</p>
+<h1 id="Goals">Goals<a class="anchor-link" href="#Goals">&#182;</a></h1><p>At the end of the tutorial you will know:</p>
+<ul>
+<li>how to write clustering likelihoods</li>
+<li>how to emulate their theory</li>
+<li>how to run inference (sampling, profiling, Fisher)</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="Environment">Environment<a class="anchor-link" href="#Environment">&#182;</a></h1><p>To run the following desilike-only examples, you just need to have installed <strong>desilike</strong> (which requires <strong>cosmoprimo</strong>) with:</p>
 <pre><code>python -m pip install git+https://github.com/cosmodesi/desilike#egg=desilike
 </code></pre>
 <p>For the analytic solver:</p>
 <pre><code>python -m pip install jax[cpu]
 </code></pre>
-<p>Available in the preliminary* cosmodesi environment at this path:</p>
-<pre><code># Source the environment
-source /global/cfs/cdirs/desi/users/adematti/cosmodesi_environment.sh main
-# You may want to have it in the jupyter-kernel for plots, to be done once
-${COSMODESIMODULES}/install_jupyter_kernel.sh main
+<p>Easiest is however to use the cosmodesi environment at NERSC:</p>
+<pre><code>source /global/cfs/cdirs/desi/users/adematti/cosmodesi_environment.sh main  # source the environment
+${COSMODESIMODULES}/install_jupyter_kernel.sh main  # this to be done once
 </code></pre>
-<p>Instead of the more stable one:</p>
-<pre><code>source /global/common/software/desi/users/adematti/cosmodesi_environment.sh main
+<p>NB: to remove the previous kernel:</p>
+<pre><code>rm -rf $HOME/.local/share/jupyter/kernels/cosmodesi-main
 </code></pre>
-<p>that can be used for GQC-only work.</p>
+<p>To see these slides in a browser, e.g.:</p>
+<pre><code>firefox desilike_intro.slides.html
+</code></pre>
 
 </div>
 </div>
@@ -14782,7 +14800,7 @@ ${COSMODESIMODULES}/install_jupyter_kernel.sh main
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -14832,7 +14850,7 @@ ${COSMODESIMODULES}/install_jupyter_kernel.sh main
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -14891,7 +14909,7 @@ ${COSMODESIMODULES}/install_jupyter_kernel.sh main
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -14929,7 +14947,7 @@ ${COSMODESIMODULES}/install_jupyter_kernel.sh main
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -14989,7 +15007,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15027,7 +15045,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15064,7 +15082,7 @@ class="
 <span class="c1"># Changes to cosmo.all_params impact this calculator (pipeline) only</span>
 
 <span class="k">del</span> <span class="n">cosmo</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">'omega_cdm'</span><span class="p">]</span>
-<span class="n">cosmo</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">'Omega_m'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> 
+<span class="n">cosmo</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">'Omega_m'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">'prior'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'limits'</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">]},</span>
         <span class="s1">'ref'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'dist'</span><span class="p">:</span> <span class="s1">'norm'</span><span class="p">,</span> <span class="s1">'loc'</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s1">'scale'</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">},</span>
         <span class="s1">'latex'</span><span class="p">:</span> <span class="sa">r</span><span class="s1">'\Omega_</span><span class="si">{m}</span><span class="s1">'</span><span class="p">,</span>
@@ -15087,7 +15105,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15148,7 +15166,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15157,46 +15175,46 @@ class="
 
 class ShapeFitPowerSpectrumTemplate(BasePowerSpectrumTemplate, ShapeFitPowerSpectrumExtractor)
  |  ShapeFitPowerSpectrumTemplate(*args, **kwargs)
- |  
+ |
  |  ShapeFit power spectrum template.
- |  
+ |
  |  Parameters
  |  ----------
  |  k : array, default=None
  |      Theory wavenumbers where to evaluate linear power spectrum.
- |  
+ |
  |  z : float, default=1.
  |      Effective redshift.
- |  
+ |
  |  kp : float, default=0.03
  |      Pivot point in ShapeFit parameterization.
- |  
+ |
  |  a : float, default=0.6
  |      :math:`a` parameter in ShapeFit parameterization.
- |  
+ |
  |  apmode : str, default=&#39;qparqper&#39;
  |      Alcock-Paczynski parameterization:
- |  
+ |
  |      - &#39;qiso&#39;: single istropic parameter &#39;qiso&#39;
  |      - &#39;qap&#39;: single, Alcock-Paczynski parameter &#39;qap&#39;
  |      - &#39;qisoqap&#39;: two parameters &#39;qiso&#39;, &#39;qap&#39;
  |      - &#39;qparqper&#39;: two parameters &#39;qpar&#39; (scaling along the line-of-sight), &#39;qper&#39; (scaling perpendicular to the line-of-sight)
- |  
+ |
  |  fiducial : str, tuple, dict, cosmoprimo.Cosmology, default=&#39;DESI&#39;
  |      Specifications for fiducial cosmology, used to compute the linear power spectrum. Either:
- |  
+ |
  |      - str: name of fiducial cosmology in :class:`cosmoprimo.fiucial`
  |      - tuple: (name of fiducial cosmology, dictionary of parameters to update)
  |      - dict: dictionary of parameters
  |      - :class:`cosmoprimo.Cosmology`: Cosmology instance
- |  
+ |
  |  with_now : str, default=&#39;peakaverage&#39;
  |      Compute smoothed, BAO-filtered, linear power spectrum with this engine (e.g. &#39;wallish2018&#39;, &#39;peakaverage&#39;).
- |  
+ |
  |  Reference
  |  ---------
  |  https://arxiv.org/abs/2106.07641
- |  
+ |
  |  Method resolution order:
  |      ShapeFitPowerSpectrumTemplate
  |      BasePowerSpectrumTemplate
@@ -15205,128 +15223,128 @@ class ShapeFitPowerSpectrumTemplate(BasePowerSpectrumTemplate, ShapeFitPowerSpec
  |      desilike.base.BaseCalculator
  |      desilike.utils.BaseClass
  |      builtins.object
- |  
+ |
  |  Methods defined here:
- |  
+ |
  |  calculate(self, df=1.0, dm=0.0, dn=0.0)
- |  
+ |
  |  get(self)
  |      Return quantity of main interest, e.g. loglikelihood + logprior if ``self`` is a likelihood.
- |  
+ |
  |  initialize(self, *args, kp=0.03, a=0.6, r=8.0, with_now=&#39;peakaverage&#39;, **kwargs)
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |  
+ |
  |  log_critical = logger(*args, rank=None, mpicomm=None, **kwargs) from desilike.utils.BaseMetaClass
- |  
+ |
  |  log_debug = logger(*args, rank=None, mpicomm=None, **kwargs) from desilike.utils.BaseMetaClass
- |  
+ |
  |  log_error = logger(*args, rank=None, mpicomm=None, **kwargs) from desilike.utils.BaseMetaClass
- |  
+ |
  |  log_info = logger(*args, rank=None, mpicomm=None, **kwargs) from desilike.utils.BaseMetaClass
- |  
+ |
  |  log_warning = logger(*args, rank=None, mpicomm=None, **kwargs) from desilike.utils.BaseMetaClass
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Data and other attributes defined here:
- |  
+ |
  |  logger = &lt;Logger ShapeFitPowerSpectrumTemplate (WARNING)&gt;
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Methods inherited from BasePowerSpectrumTemplate:
- |  
+ |
  |  ap_k_mu(self, k, mu)
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Readonly properties inherited from BasePowerSpectrumTemplate:
- |  
+ |
  |  qpar
- |  
+ |
  |  qper
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Data and other attributes inherited from BasePowerSpectrumTemplate:
- |  
+ |
  |  config_fn = &#39;power_template.yaml&#39;
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Methods inherited from desilike.base.BaseCalculator:
- |  
+ |
  |  __call__(self, **params)
  |      Take all parameters as input, calculate, and return the result of :attr:`get`
- |  
+ |
  |  __copy__(self)
  |      Copy this calculator only (not the calculators it may depend on).
- |      
+ |
  |      &gt;&gt;&gt; calculator2 = calculator1.copy()
  |      # calculator2 will call calculator1 dependencies
- |  
+ |
  |  __deepcopy__(self, memo)
- |  
+ |
  |  __getattr__(self, name)
- |  
+ |
  |  __getstate__(self)
  |      Return this class&#39; state dictionary.
  |      To be able to emulate this calculator, it should return all the quantities that can then be used by any other calculator.
- |  
+ |
  |  __init__(self, *args, **kwargs)
  |      Initialize self.  See help(type(self)) for accurate signature.
- |  
+ |
  |  deepcopy(self)
  |      Copy the calculator and full pipeline:
- |      
+ |
  |      &gt;&gt;&gt; calculator2 = calculator1.deepcopy()
  |      # calculator2 lives independently from calculator1
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods inherited from desilike.base.BaseCalculator:
- |  
+ |
  |  __new__(cls, *args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Readonly properties inherited from desilike.base.BaseCalculator:
- |  
+ |
  |  init
  |      Return configuration at initialization.
- |  
+ |
  |  varied_params
  |      Varied pipeline parameters.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Data descriptors inherited from desilike.base.BaseCalculator:
- |  
+ |
  |  all_params
  |      All pipeline parameters.
- |  
+ |
  |  mpicomm
- |  
+ |
  |  params
  |      This calculator&#39;s specific parameters.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Methods inherited from desilike.utils.BaseClass:
- |  
+ |
  |  __setstate__(self, state)
- |  
+ |
  |  copy(self, *args, **kwargs)
- |  
+ |
  |  save(self, filename)
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Class methods inherited from desilike.utils.BaseClass:
- |  
+ |
  |  from_state(state) from desilike.utils.BaseMetaClass
- |  
+ |
  |  load(filename, fallback_class=None) from desilike.utils.BaseMetaClass
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Data descriptors inherited from desilike.utils.BaseClass:
- |  
+ |
  |  __dict__
  |      dictionary for instance variables (if defined)
- |  
+ |
  |  __weakref__
  |      list of weak references to the object (if defined)
 
@@ -15400,7 +15418,7 @@ class ShapeFitPowerSpectrumTemplate(BasePowerSpectrumTemplate, ShapeFitPowerSpec
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15467,7 +15485,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15477,7 +15495,7 @@ class="
 </div>
 </div>
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15539,7 +15557,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15668,7 +15686,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15705,7 +15723,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15748,7 +15766,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -15842,7 +15860,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 
 
@@ -15895,7 +15913,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
 
 
@@ -15973,7 +15991,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -16037,7 +16055,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
 
 
@@ -16094,7 +16112,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[25]:</div>
 
 
@@ -16153,7 +16171,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -16175,7 +16193,7 @@ ParameterCollection([&#39;h&#39;, &#39;Omega_m&#39;, &#39;omega_b&#39;, &#39;log
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Bindings">Bindings<a class="anchor-link" href="#Bindings">&#182;</a></h1><p>Now we have our likelihood, we can bind it to external cosmological inference codes (montepython, cosmosis, cobaya).</p>
+<h1 id="Bindings">Bindings<a class="anchor-link" href="#Bindings">&#182;</a></h1><p>Now we have our likelihood, we can bind it to external cosmological inference codes (Cobaya, CosmoSIS and MontePython).</p>
 
 </div>
 </div>
@@ -16230,9 +16248,9 @@ ParameterCollection([&#39;h&#39;, &#39;Omega_m&#39;, &#39;omega_b&#39;, &#39;log
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>Let's pass this function to the generators that will write the necessary files
-to import it as an external likelihood in cobaya, cosmosis, montepython.</p>
+to import it as an external likelihood in Cobaya, CosmoSIS and MontePython.</p>
 <p>You can pass <code>name_like</code> to give the likelihood another name than <code>MyLikelihood</code>
-and <code>kw_like</code> to pass optional arguments to <code>MyLikelihood</code> (we will see practical examples in the end).</p>
+and <code>kw_like</code> to pass optional arguments to <code>MyLikelihood</code>.</p>
 
 </div>
 </div>
@@ -16257,6 +16275,18 @@ and <code>kw_like</code> to pass optional arguments to <code>MyLikelihood</code>
 </div>
 </div>
 
+</div></div><div class="fragment">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>We will explore these bindings into more details in the second tutorial.</p>
+
+</div>
+</div>
+</div>
 </div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
@@ -16321,7 +16351,7 @@ and <code>kw_like</code> to pass optional arguments to <code>MyLikelihood</code>
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -16420,7 +16450,7 @@ we provide wrapping for some profilers and samplers.</p>
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -16499,7 +16529,7 @@ we provide wrapping for some profilers and samplers.</p>
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -16575,7 +16605,7 @@ we provide wrapping for some profilers and samplers.</p>
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -16980,7 +17010,7 @@ we provide wrapping for some profilers and samplers.</p>
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -17026,7 +17056,7 @@ we provide wrapping for some profilers and samplers.</p>
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -17037,7 +17067,7 @@ Removed no burn in
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[38]:</div>
 
 
@@ -17049,7 +17079,7 @@ Removed no burn in
 
 </div>
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -17109,7 +17139,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -17127,6 +17157,26 @@ class="
 
 </div>
 
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># LikelihoodFisher can be saved with:</span>
+<span class="n">fish</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">'_tests/fisher.npy'</span><span class="p">)</span>
+<span class="c1"># And reloaded with:</span>
+<span class="kn">from</span> <span class="nn">desilike</span> <span class="kn">import</span> <span class="n">LikelihoodFisher</span>
+<span class="n">fish</span> <span class="o">=</span> <span class="n">LikelihoodFisher</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'_tests/fisher.npy'</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
 </div>
 
 </div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -17160,7 +17210,7 @@ class="
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-    
+
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
@@ -17243,10 +17293,10 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Wrap-up">Wrap-up<a class="anchor-link" href="#Wrap-up">&#182;</a></h1><p>Reminder:</p>
+<h1 id="Wrap-up">Wrap-up<a class="anchor-link" href="#Wrap-up">&#182;</a></h1><p>desilike is a framework that makes it (hopefully) easy to define clustering likelihoods, and wraps many useful utilities for inference: emulators, profilers, samplers, Fisher estimation.</p>
 <p><a href="https://desilike.readthedocs.io/">desilike docs</a>, especially <a href="https://desilike.readthedocs.io/en/latest/user/getting_started.html">getting started</a></p>
 <p><a href="https://github.com/cosmodesi/desilike/tree/main/nb">desilike notebooks</a></p>
-<p>Environment at NERSC with desilike, cobaya, cosmosis, classy, camb, and many samplers installed:</p>
+<p>Environment at NERSC with desilike, Cobaya, CosmoSIS, Class, camb, and many samplers installed:</p>
 <pre><code>source /global/cfs/cdirs/desi/users/adematti/cosmodesi_environment.sh main  # source the environment
 # You may want to have it in the jupyter-kernel for plots
 ${COSMODESIMODULES}/install_jupyter_kernel.sh main  # this to be done once
