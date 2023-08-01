@@ -14518,7 +14518,6 @@ a.anchor-link {
   text-align: left;
   width: 70% !important;
 }
-
 .reveal.fade {
   opacity: 1;
 }
@@ -14700,7 +14699,7 @@ div.jp-OutputPrompt {
 ${COSMODESIMODULES}/install_jupyter_kernel.sh main  # this to be done once
 </code></pre>
 <p>NB: to remove the previous kernel:</p>
-<pre><code>rm -rf $HOME/.local/share/jupyter/kernels/cosmodesi-main
+<pre><code>rm -rf ${HOME}/.local/share/jupyter/kernels/cosmodesi-main
 </code></pre>
 <p>To see these slides in a browser, e.g.:</p>
 <pre><code>firefox desilike_intro.slides.html
@@ -15605,10 +15604,13 @@ class="
 <span class="n">b1</span> <span class="o">=</span> <span class="mf">1.5</span>
 <span class="n">theory</span> <span class="o">=</span> <span class="n">KaiserTracerPowerSpectrumMultipoles</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">)</span>
 <span class="n">observable</span> <span class="o">=</span> <span class="n">TracerPowerSpectrumMultipolesObservable</span><span class="p">(</span>\
-             <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'b1'</span><span class="p">:</span> <span class="n">b1</span><span class="p">},</span>  <span class="c1"># path to data, *pypower* file, array, or dictionary of parameters</span>
-             <span class="n">covariance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># path to mocks, array (covariance matrix), or None</span>
+             <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'b1'</span><span class="p">:</span> <span class="n">b1</span><span class="p">},</span>  <span class="c1"># a (list of) (path to) PowerSpectrumStatistics object, flat array, or dictionary of parameters</span>
+             <span class="n">covariance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># a (list of) (path to) mocks, array (covariance matrix), or None</span>
              <span class="n">klim</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">],</span> <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">]},</span>  <span class="c1"># k-limits, between 0.01 and 0.2 h/Mpc with 0.005 h/Mpc</span>
              <span class="n">theory</span><span class="o">=</span><span class="n">theory</span><span class="p">)</span>  <span class="c1"># previously defined theory</span>
+<span class="c1"># Look at help(TracerPowerSpectrumMultipolesObservable)</span>
+<span class="c1"># for more options (to provide ells, k instead of klim, shotnoise...)</span>
+<span class="c1"># also, https://github.com/cosmodesi/desilike/blob/main/nb/bao_examples.ipynb</span>
 </pre></div>
 
      </div>
